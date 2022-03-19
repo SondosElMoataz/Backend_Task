@@ -1,8 +1,8 @@
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `DOC_TRACK_CREATION`()
 BEGIN
-DROP DATABASE document_tracking_system;
-CREATE DATABASE document_tracking_system;
+
+
 CREATE TABLE organisations (
     org_id int PRIMARY KEY,
     name varchar(255)
