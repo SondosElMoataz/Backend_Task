@@ -1,0 +1,20 @@
+<table> 
+    <thead> 
+    <tr> 
+        <th>Name</th> 
+        <th>age</th> 
+    </tr> 
+    </thead> 
+    <tbody> 
+        {% for row in value %}  
+            <tr> 
+                <td>{{row[0]}}</td> 
+                <td>{{row[1]}}</td> 
+                <td>
+                     <a href="/edit/{{row[2]}}" >edit</a>
+                    <a href="/delete/{{row[2]}}" >delete</a>
+                </td>
+            </tr> 
+        {% endfor %} 
+    </tbody> 
+</table> 
