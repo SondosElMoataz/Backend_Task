@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request
+from flask import Flask,render_template, request, redirect,url_for
 from flask_mysqldb import MySQL
  
 app = Flask(__name__)
@@ -14,18 +14,20 @@ mysql = MySQL(app)
 def form():
     return render_template('add.html')
  
-
+#  Add new customer
 @app.route('/add', methods = ['POST'])
-def login():
+def add():
     name = request.form['name']
     age = request.form['age']
     conn = mysql.connection
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO customer(name,age) VALUES(%s,%s)''',(name,age))
-    mysql.connection.commit()
+    conn.commit()
     cursor.close()
-    return f"Added Successfully"
+    # return f"Added Successfully"
+    return redirect(url_for('get'))
 
+#  Home : shows a table of all customers 
 @app.route('/')
 def get():
     try:
@@ -40,6 +42,7 @@ def get():
     finally:
         cursor.close() 
 
+#  form to edit the customer 
 @app.route('/edit/<id>', methods = ['POST', 'GET'])
 def get_customer(id):
     conn = mysql.connection
@@ -49,6 +52,7 @@ def get_customer(id):
     cursor.close()
     return render_template('edit.html', row = row)
 
+#   updating the customer on DB
 @app.route('/update/<id>', methods=['POST'])
 def update_customer(id):
     if request.method == 'POST':
@@ -59,15 +63,18 @@ def update_customer(id):
         cursor.execute("""UPDATE customer
             SET name = %s, age = %s WHERE user_id = %s """, (name, age, id))
         conn.commit()
-        return f'UPDATE SUCCESS'
+        # return f'UPDATE SUCCESS'
+        return redirect(url_for('get'))
 
+#   Delete customer
 @app.route('/delete/<id>', methods = ['POST','GET'])
 def delete_customer(id):
     conn = mysql.connection
     cursor = conn.cursor()
     cursor.execute(""" DELETE FROM customer WHERE user_id = %s """, (id))
     conn.commit()
-    return f'DELETE SUCCESS'
+    # return f'DELETE SUCCESS'
+    return redirect(url_for('get'))
 
 
 
